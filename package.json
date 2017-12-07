@@ -1,0 +1,26 @@
+{
+  "name": "poloniex2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Megatone",
+  "license": "MIT",
+  "dependencies": {
+    "@types/bson": "^1.0.5",
+    "autobahn": "^17.5.2",
+    "body-parser": "^1.18.2",
+    "child-process-promise": "^2.2.1",
+    "colors": "^1.1.2",
+    "express": "^4.16.2",
+    "fcm-node": "^1.2.0",
+    "mongoose": "^4.13.5",
+    "node-cron": "^1.2.1",
+    "poloniex-api": "^1.2.4",
+    "ps-list": "^4.0.0",
+    "request": "^2.81.0",
+    "socket.io": "^2.0.4"
+  },
+  "description": ""
+}
