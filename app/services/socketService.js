@@ -6,6 +6,7 @@ module.exports = (app, settings, c) => {
     const io = require('socket.io')(server);
     const DeviceController = require('../controllers/deviceController');
     const SubscriptionController = require('../controllers/subscriptionController');
+    module.ticks = [];
 
     module.initSocketService = () => {
         server.listen(settings.sockets.port, () => {
@@ -53,9 +54,9 @@ module.exports = (app, settings, c) => {
         });
     }
 
-    module.emitTicks = (ticks) => {
+    module.emitTicks = () => {
         if (io.engine.clientsCount > 0) {
-            io.sockets.emit("ticks", ticks);
+            io.sockets.emit("ticks", module.ticks);
             c.emit('Emit node information to ' + io.engine.clientsCount + ' clients width socket connection');
         }
     }

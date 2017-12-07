@@ -32,7 +32,8 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                     }
                     NotificationService.checkNotificacions(ticks);
                     console.log('Emit Ticks => ' + ticks.length);
-                    SocketService.emitTicks(ticks);
+                    SocketService.ticks = ticks;
+                    SocketService.emitTicks();
                 }
             });
         } catch (err) {
