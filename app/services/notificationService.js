@@ -40,7 +40,7 @@ module.exports = (settings, c) => {
                                     break;
                             }
                             if (sendNotification === true && subscription.notified === false) {
-                                sendNotification(subscription, notificationMessage);
+                                sendNotificationMessage(subscription, notificationMessage);
                             } else if (sendNotification === false && subscription.notified === true) {
                                 SubscriptionController.updateNotified(subscription, false);
                             }
@@ -53,7 +53,7 @@ module.exports = (settings, c) => {
         }
     }
 
-    function sendNotification(subscription, notificationMessage) {
+    function sendNotificationMessage(subscription, notificationMessage) {
         var message = generateNotification(subscription, notificationMessage);
         fcm.send(message, function (err, response) {
             if (err) {
