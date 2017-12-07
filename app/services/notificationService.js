@@ -64,13 +64,14 @@ module.exports = (settings, c) => {
             to: subscription.device.token,
             notification: {
                 title: 'Poloniex Notification',
-                body: text
+                body: text,
+                sound: 'default'
             },
             data: {
                 title: 'Poloniex Notification',
-                body: text
-            },
-            sound: 'default'
+                body: text,
+                sound: 'default'
+            }
         };
     }
 
