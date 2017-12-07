@@ -10,6 +10,7 @@ module.exports = (settings, c) => {
         try {
             let now = new Date().getTime();
             SubscriptionController.getActiveSubscriptions(now).then(subscriptions => {
+                console.log('getActiveSubscriptions =>  ' + subscriptions.length);
                 if (subscriptions) {
                     for (var i = 0; i <= ticks.length - 1; i++) {
                         let tick = ticks[i];
