@@ -9,7 +9,7 @@ module.exports = (settings, c) => {
     module.checkNotificacions = (ticks) => {
         try {
             let now = new Date().getTime();
-            SubscriptionController.getActiveSubscriptionsNotNotified(now).then(subscriptions => {
+            SubscriptionController.getActiveSubscriptions(now).then(subscriptions => {
                 if (subscriptions) {
                     for (var i = 0; i <= ticks.length - 1; i++) {
                         let tick = ticks[i];
