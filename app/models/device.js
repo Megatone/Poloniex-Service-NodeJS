@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 
 var DeviceSchema = Schema({
     uuid: String,
-    token: String
+    token: String,
+    refresh: Number
 });
 
 module.exports = mongoose.model('Device', DeviceSchema);   
