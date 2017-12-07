@@ -7,8 +7,6 @@ module.exports = (app, settings, c) => {
     const DeviceController = require('../controllers/deviceController');
     const SubscriptionController = require('../controllers/subscriptionController');
     module.ticks = [];
-    module.lastTick5sec = 0;
-    module.lastTick30sec = 0;
 
     module.initSocketService = () => {
         server.listen(settings.sockets.port, () => {
