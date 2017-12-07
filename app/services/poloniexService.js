@@ -34,11 +34,13 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                     console.log('Emit Ticks => ' + ticks.length);
                     SocketService.ticks = ticks;
                     SocketService.emitTicks('ticks-1');
-                    let now = new Date().getSeconds();
-                    if (now % 5 === 0) {
+                    let now = new Date().getTime();
+                    if (SocketService.lastTick5sec < (now - 5000)) {
+                        SocketService.lastTick5sec = now;
                         SocketService.emitTicks('ticks-5');
                     }
-                    if (now % 30 === 0) {
+                    if (SocketService.lastTick30sec < (now - 30000)) {
+                        SocketService.lastTick30sec = now;
                         SocketService.emitTicks('ticks-1');
                     }
 
