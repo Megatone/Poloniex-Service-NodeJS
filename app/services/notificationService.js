@@ -49,7 +49,7 @@ module.exports = (settings, c) => {
                 }
             });
         } catch (err) {
-            console.log('notificationService checkNotifications');
+            console.log('notificationService checkNotifications' + err.stack);
         }
     }
 
