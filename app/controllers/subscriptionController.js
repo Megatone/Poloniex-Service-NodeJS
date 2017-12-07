@@ -19,7 +19,8 @@ function upsert(subscription) {
                         value: subscription.value,
                         status: subscription.status,
                         type: subscription.type,
-                        lastNotification: subscription.lastNotification
+                        lastNotification: subscription.lastNotification,
+                        notified: false
                     },
                     { new: true, upsert: true }).exec();
         });
@@ -34,13 +35,9 @@ function getActiveSubscriptions(nowTimestamp) {
     return Subscription.find({ status: true, lastNotification: { $lt: filterLastNotification } }).populate({ path: 'device' }).populate({ path: 'pair' }).exec();
 }
 
-
-
 function updateNotified(subscription, value) {
     Subscription.findByIdAndUpdate(subscription._id, { notified: value, lastNotification: new Date().getTime() }).exec();
 }
-
-
 
 module.exports = {
     getSubscriptionsByDeviceId,
