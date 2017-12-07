@@ -31,17 +31,19 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                         //   c.success('Coin Price Registered successfully => ' + tick.currencyPair + ' : ' + tick.lastPrice);
                     }
                     NotificationService.checkNotificacions(ticks);
-                    console.log('Emit Ticks => ' + ticks.length);
+                    //console.log('Emit Ticks => ' + ticks.length);
                     SocketService.ticks = ticks;
                     SocketService.emitTicks('ticks-1');
                     let now = new Date().getTime();
                     if (SocketService.lastTick5sec < (now - 5000)) {
                         SocketService.lastTick5sec = now;
                         SocketService.emitTicks('ticks-5');
+                        console.log('emit ticks 5');
                     }
                     if (SocketService.lastTick30sec < (now - 30000)) {
                         SocketService.lastTick30sec = now;
                         SocketService.emitTicks('ticks-30');
+                        console.log('emit ticks 30');
                     }
 
                 }
