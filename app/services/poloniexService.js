@@ -41,7 +41,7 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                     }
                     if (SocketService.lastTick30sec < (now - 30000)) {
                         SocketService.lastTick30sec = now;
-                        SocketService.emitTicks('ticks-1');
+                        SocketService.emitTicks('ticks-30');
                     }
 
                 }
