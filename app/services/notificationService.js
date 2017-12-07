@@ -9,34 +9,40 @@ module.exports = (settings, c) => {
     module.checkNotificacions = (ticks) => {
         try {
             let now = new Date().getTime();
-            SubscriptionController.getActiveSubscriptions(now).then(subscriptions => {
+            SubscriptionController.getActiveSubscriptionsNotNotified(now).then(subscriptions => {
                 if (subscriptions) {
                     for (var i = 0; i <= ticks.length - 1; i++) {
                         let tick = ticks[i];
                         let subscriptionFiltered = subscriptions.filter(s => s.pair.tag === tick.pair.tag);
                         for (var x = 0; x <= subscriptionFiltered.length - 1; x++) {
                             let subscription = subscriptionFiltered[x];
+                            let sendNotification = false;
+                            let notificationMessage = '';
                             switch (subscription.type) {
                                 case '$>':
-                                    if (parseFloat(tick.lastPrice) > parseFloat(subscription.value))
-                                        sendNotificacion(subscription, tick.lastPrice, now);
+                                    sendNotificacion = (parseFloat(tick.lastPrice) > parseFloat(subscription.value));
+                                    notificationMessage = tick.lastPrice;
                                     break;
                                 case '$<':
-
-                                    if (parseFloat(tick.lastPrice) < parseFloat(subscription.value))
-                                        sendNotificacion(subscription, tick.lastPrice, now);
+                                    sendNotificacion = (parseFloat(tick.lastPrice) < parseFloat(subscription.value));
+                                    notificationMessage = tick.lastPrice;
                                     break;
                                 case '%>':
 
-                                    if (parseFloat(tick.percentChange) > parseFloat(subscription.value))
-                                        sendNotificacion(subscription, tick.percentChange, now);
+                                    sendNotificacion = (parseFloat(tick.percentChange) > parseFloat(subscription.value))
+                                    notificationMessage = tick.percentChange
                                     break;
                                 case '%<':
-                                    if (parseFloat(tick.percentChange) < parseFloat(subscription.value))
-                                        sendNotificacion(subscription, tick.percentChange, now);
+                                    sendNotificacion = (parseFloat(tick.percentChange) < parseFloat(subscription.value))
+                                    notificationMessage = tick.percentChange
                                     break;
                                 default:
                                     break;
+                            }
+                            if (sendNotificacion === true && subscription.notified === false) {
+                                sendNotificacion(subscription, notificationMessage);
+                            } else if (sendNotificacion === false && subscription.notified === true) {
+                                SubscriptionController.updateNotified(subscription, false);
                             }
                         }
                     }
@@ -47,29 +53,29 @@ module.exports = (settings, c) => {
         }
     }
 
-    function sendNotificacion(subscription, text, now) {
-        var message = generateNotification(subscription, text);
+    function sendNotificacion(subscription, notificationMessage) {
+        var message = generateNotification(subscription, notificationMessage);
         fcm.send(message, function (err, response) {
             if (err) {
                 c.danger(JSON.stringify(err));
             } else {
-                SubscriptionController.updateLastNotification(subscription._id, now);
+                SubscriptionController.updateNotified(subscription, true);
                 c.success(JSON.stringify(response).replace("\\", ""));
             }
         });
     }
 
-    function generateNotification(subscription, text) {
+    function generateNotification(subscription, notificationMessage) {
         return {
             to: subscription.device.token,
             notification: {
                 title: 'Poloniex Notification',
-                body: text,
+                body: notificationMessage,
                 sound: 'default'
             },
             data: {
                 title: 'Poloniex Notification',
-                body: text,
+                body: notificationMessage,
                 sound: 'default'
             }
         };

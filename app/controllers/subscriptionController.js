@@ -34,13 +34,17 @@ function getActiveSubscriptions(nowTimestamp) {
     return Subscription.find({ status: true, lastNotification: { $lt: filterLastNotification } }).populate({ path: 'device' }).populate({ path: 'pair' }).exec();
 }
 
-function updateLastNotification(subscriptionId, nowTimestamp) {
-    Subscription.findByIdAndUpdate(subscriptionId, { lastNotification: nowTimestamp }).exec();
+
+
+function updateNotified(subscription, value) {
+    Subscription.findByIdAndUpdate(subscription._id, { notified: value, lastNotification: new Date().getTime() }).exec();
 }
+
+
 
 module.exports = {
     getSubscriptionsByDeviceId,
-    upsert,
     getActiveSubscriptions,
-    updateLastNotification
+    upsert,
+    updateNotified
 }

@@ -15,7 +15,8 @@ var SubscriptionSchema = Schema({
     value: Number,
     status: Boolean,
     type: String,
-    lastNotification: Number
+    lastNotification: Number,
+    notified: Boolean
 });
 
 module.exports = mongoose.model('Subscription', SubscriptionSchema);   
