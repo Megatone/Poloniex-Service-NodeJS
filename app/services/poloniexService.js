@@ -33,7 +33,15 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                     NotificationService.checkNotificacions(ticks);
                     console.log('Emit Ticks => ' + ticks.length);
                     SocketService.ticks = ticks;
-                    SocketService.emitTicks();
+                    SocketService.emitTicks('ticks-1');
+                    let now = new Date().getSeconds();
+                    if (now % 5 === 0) {
+                        SocketService.emitTicks('ticks-5');
+                    }
+                    if (now % 30 === 0) {
+                        SocketService.emitTicks('ticks-1');
+                    }
+
                 }
             });
         } catch (err) {

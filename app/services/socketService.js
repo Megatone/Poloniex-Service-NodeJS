@@ -54,9 +54,9 @@ module.exports = (app, settings, c) => {
         });
     }
 
-    module.emitTicks = () => {
+    module.emitTicks = (channel) => {
         if (io.engine.clientsCount > 0) {
-            io.sockets.emit("ticks", module.ticks);
+            io.sockets.emit(channel, module.ticks);
             c.emit('Emit node information to ' + io.engine.clientsCount + ' clients width socket connection');
         }
     }
