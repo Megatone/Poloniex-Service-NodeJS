@@ -20,28 +20,28 @@ module.exports = (settings, c) => {
                             let notificationMessage = '';
                             switch (subscription.type) {
                                 case '$>':
-                                    sendNotificacion = (parseFloat(tick.lastPrice) > parseFloat(subscription.value));
+                                    sendNotification = (parseFloat(tick.lastPrice) > parseFloat(subscription.value));
                                     notificationMessage = tick.lastPrice;
                                     break;
                                 case '$<':
-                                    sendNotificacion = (parseFloat(tick.lastPrice) < parseFloat(subscription.value));
+                                    sendNotification = (parseFloat(tick.lastPrice) < parseFloat(subscription.value));
                                     notificationMessage = tick.lastPrice;
                                     break;
                                 case '%>':
 
-                                    sendNotificacion = (parseFloat(tick.percentChange) > parseFloat(subscription.value))
+                                    sendNotification = (parseFloat(tick.percentChange) > parseFloat(subscription.value))
                                     notificationMessage = tick.percentChange
                                     break;
                                 case '%<':
-                                    sendNotificacion = (parseFloat(tick.percentChange) < parseFloat(subscription.value))
+                                    sendNotification = (parseFloat(tick.percentChange) < parseFloat(subscription.value))
                                     notificationMessage = tick.percentChange
                                     break;
                                 default:
                                     break;
                             }
-                            if (sendNotificacion === true && subscription.notified === false) {
-                                sendNotificacion(subscription, notificationMessage);
-                            } else if (sendNotificacion === false && subscription.notified === true) {
+                            if (sendNotification === true && subscription.notified === false) {
+                                sendNotification(subscription, notificationMessage);
+                            } else if (sendNotification === false && subscription.notified === true) {
                                 SubscriptionController.updateNotified(subscription, false);
                             }
                         }
@@ -53,7 +53,7 @@ module.exports = (settings, c) => {
         }
     }
 
-    function sendNotificacion(subscription, notificationMessage) {
+    function sendNotification(subscription, notificationMessage) {
         var message = generateNotification(subscription, notificationMessage);
         fcm.send(message, function (err, response) {
             if (err) {
