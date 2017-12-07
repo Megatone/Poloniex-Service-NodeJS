@@ -32,7 +32,7 @@ function upsert(subscription) {
 
 function getActiveSubscriptions(nowTimestamp) {
     let filterLastNotification = nowTimestamp - 30000; //30 sec
-    return Subscription.find({ status: true, lastNotification: { $lt: filterLastNotification } }).populate({ path: 'device' }).populate({ path: 'pair' }).exec();
+    return Subscription.find({ status: true, lastNotification: { $lt: filterLastNotification } }).populate({ path: 'device' }).where('device.notificationStatus', true).populate({ path: 'pair' }).exec();
 }
 
 function updateNotified(subscription, value) {

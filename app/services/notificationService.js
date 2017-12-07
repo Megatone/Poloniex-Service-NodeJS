@@ -28,7 +28,6 @@ module.exports = (settings, c) => {
                                     notificationMessage = tick.lastPrice;
                                     break;
                                 case '%>':
-
                                     sendNotification = (parseFloat(tick.percentChange) > parseFloat(subscription.value))
                                     notificationMessage = tick.percentChange
                                     break;
