@@ -1,7 +1,6 @@
 'use strict'
 
 const mongoose = require('mongoose');
-//const psList = require('ps-list');
 const spawn = require('child-process-promise').spawn;
 const settings = require('./config/settings');
 const c = require('./utils/console')(settings.console.limit , settings.console.charSpance);
