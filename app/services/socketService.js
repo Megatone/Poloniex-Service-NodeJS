@@ -75,28 +75,24 @@ module.exports = (app, settings, c) => {
 
     module.emitChannel = (channel) => {
         if (io.engine.clientsCount > 0) {
-            let ticks_btc = module.ticks.filter((t) => t.pair.main === 'BTC');
-            emitTicks(channel + '-BTC', ticks_btc);
-
-            let ticks_eth = module.ticks.filter((t) => t.pair.main === 'ETH');
-            emitTicks(channel + '-ETH', ticks_eth);
-
-            let ticks_xmr = module.ticks.filter((t) => t.pair.main === 'XMR');
-            emitTicks(channel + '-XMR', ticks_xmr);
-
-            let ticks_usdt = module.ticks.filter((t) => t.pair.main === 'USDT');
-            emitTicks(channel + '-USDT', ticks_usdt);
+            emitTicks(channel, 'BTC');
+            emitTicks(channel, 'ETH');
+            emitTicks(channel, 'XMR');
+            emitTicks(channel, 'USDT');
         }
     };
 
-    function emitTicks(channel, ticks) {
-        io.sockets.to(channel).emit('ticks', ticks);
-        let room = io.nsps['/'].adapter.rooms[channel];
+    function emitTicks(channel, main) {
+        let finalChannel = channel + '-' + main;
+        let room = io.nsps['/'].adapter.rooms[finalChannel];
         let clientsInRoom = 0;
         if (room)
             clientsInRoom = room.sockets ? Object.keys(room.sockets).length : 0;
-        c.emit('Emit ticks on channel "' + channel + '" to ' + clientsInRoom + ' clients');
+        if (clientsInRoom > 0) {
+            let _ticks = module.ticks.filter((t) => t.pair.main === main);
+            io.sockets.to(finalChannel).emit('ticks', _ticks);
+            c.emit('Emit ticks on channel "' + finalChannel + '" to ' + clientsInRoom + ' clients');
+        }
     }
-
     return module;
 }
