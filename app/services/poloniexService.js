@@ -7,15 +7,16 @@ module.exports = (SocketService, NotificationService, settings, c) => {
 
     const cron10Sec = cron.schedule('*/2 * * * * *', () => {
         getTicks();
-
     }, false);
 
     const cron5Sec = cron.schedule('*/10 * * * * *', () => {
-        SocketService.emitTicks('ticks-10');
+        //SocketService.emitTicks('ticks-10');
+        SocketService.emitChannel('channel-10');
     }, false);
 
     const cron30Sec = cron.schedule('*/30 * * * * *', () => {
-        SocketService.emitTicks('ticks-30');
+        //SocketService.emitTicks('ticks-30');
+        SocketService.emitChannel('channel-30');
     }, false);
 
 
@@ -43,7 +44,8 @@ module.exports = (SocketService, NotificationService, settings, c) => {
                     }
                     NotificationService.checkNotificacions(ticks);
                     SocketService.ticks = ticks;
-                    SocketService.emitTicks('ticks-2');
+                    // SocketService.emitTicks('ticks-2');
+                    SocketService.emitChannel('channel-2');
                 }
             });
         } catch (err) {

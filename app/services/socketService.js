@@ -25,6 +25,25 @@ module.exports = (app, settings, c) => {
                     });
             });
 
+            socket.on('join-channel', (channel) => {
+                socket.leave('channel-2-BTC');
+                socket.leave('channel-2-XMR');
+                socket.leave('channel-2-ETH');
+                socket.leave('channel-2-USDT');
+
+                socket.leave('channel-10-BTC');
+                socket.leave('channel-10-XMR');
+                socket.leave('channel-10-ETH');
+                socket.leave('channel-10-USDT');
+
+                socket.leave('channel-30-BTC');
+                socket.leave('channel-30-XMR');
+                socket.leave('channel-30-ETH');
+                socket.leave('channel-30-USDT');
+
+                socket.join(channel);
+            });
+
             socket.on('get-subscriptions', (deviceId) => {
                 if (deviceId)
                     SubscriptionController.getSubscriptionsByDeviceId(deviceId).then((subscriptions) => {
@@ -54,11 +73,29 @@ module.exports = (app, settings, c) => {
         });
     }
 
-    module.emitTicks = (channel) => {
+    module.emitChannel = (channel) => {
         if (io.engine.clientsCount > 0) {
-            io.sockets.emit(channel, module.ticks);
-            c.emit('Emit node information to ' + io.engine.clientsCount + ' clients width socket connection');
+            let ticks_btc = module.ticks.filter((t) => t.pair.main === 'BTC');
+            emitTicks(channel + '-BTC', ticks_btc);
+
+            let ticks_eth = module.ticks.filter((t) => t.pair.main === 'ETH');
+            emitTicks(channel + '-ETH', ticks_eth);
+
+            let ticks_xmr = module.ticks.filter((t) => t.pair.main === 'XMR');
+            emitTicks(channel + '-XMR', ticks_xmr);
+
+            let ticks_usdt = module.ticks.filter((t) => t.pair.main === 'USDT');
+            emitTicks(channel + '-USDT', ticks_usdt);
         }
+    };
+
+    function emitTicks(channel, ticks) {
+        io.sockets.to(channel).emit('ticks', ticks);
+        let room = io.nsps['/'].adapter.rooms[channel];
+        let clientsInRoom = 0;
+        if (room)
+            clientsInRoom = room.sockets ? Object.keys(room.sockets).length : 0;
+        c.emit('Emit ticks on channel "' + channel + '" to ' + clientsInRoom + ' clients');
     }
 
     return module;
